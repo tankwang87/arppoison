@@ -43,4 +43,7 @@ def main():
     except KeyboardInterrupt:
         sys.exit(0)
 
-main()
+if __name__ == "__main__":
+    import cProfile
+    cProfile.run("main()", filename="analysis.out", sort="cumulative")
+    #main()
